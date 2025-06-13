@@ -1,0 +1,49 @@
+# Panduan Integrasi Model Prediksi Pengeluaran
+
+## File yang Disediakan
+- `xgb_spending_predictor.pkl`: Model XGBoost untuk prediksi pengeluaran
+- `user_segments.pkl`: Data segmentasi pengguna untuk rentang prediksi
+- `predict.py`: Script Python untuk melakukan prediksi
+
+## Cara Setup
+1. Letakkan file .pkl di folder `/models` dalam project
+2. Install dependency yang dibutuhkan:
+
+pip install pandas numpy scikit-learn xgboost joblib
+
+3. Import fungsi prediksi dalam kode:
+```python
+from predict import predict_spending
+
+Parameter Input
+user_id (string/integer): ID unik pengguna
+latest_spending (float): Pengeluaran bulan terakhir
+rolling3_spending (float): Rata-rata pengeluaran 3 bulan terakhir
+target_month (integer 1-12): Bulan yang ingin diprediksi
+is_ramadan (0/1, opsional): Flag bulan Ramadan
+is_lebaran (0/1, opsional): Flag bulan Lebaran
+is_akhir_tahun (0/1, opsional): Flag bulan Desember
+
+Contoh Penggunaan
+result = predict_spending(
+    user_id="user123",
+    latest_spending=2000000,
+    rolling3_spending=1850000,
+    target_month=7
+)
+
+Format Output
+{
+    "user_id": "user123",
+    "prediction": 1900000,
+    "min_prediction": 1520000,
+    "max_prediction": 2280000,
+    "confidence_level": "medium"
+}
+
+Tips Visualisasi
+Tampilkan rentang prediksi sebagai interval
+Gunakan warna berdasarkan confidence_level:
+high: hijau
+medium: kuning
+low: orange/merah
